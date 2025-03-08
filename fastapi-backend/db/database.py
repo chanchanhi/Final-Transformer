@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from config import OPENAI_API_KEY  # config.py에서 환경 변수 가져옴
 import os
 
 DATABASE_URL = "mysql+pymysql://fastapi_user:password123@localhost:3306/gpt_translator"
