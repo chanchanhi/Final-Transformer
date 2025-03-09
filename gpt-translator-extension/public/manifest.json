@@ -3,7 +3,8 @@
     "name": "GPT 번역 플러그인",
     "version": "1.0",
     "description": "GPT 기반 번역 확장 프로그램",
-    "permissions": ["activeTab", "contextMenus", "storage"],
+    "permissions": ["activeTab", "contextMenus", "storage", "scripting"],
+    "host_permissions": ["<all_urls>"],
     "background": {
       "service_worker": "background.js"
     },
@@ -13,7 +14,8 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content.js"]
+        "js": ["content.js"],
+        "run_at": "document_end"
       }
     ],
     "icons": {
