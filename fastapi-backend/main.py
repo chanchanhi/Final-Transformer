@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from routes import users, translate
 from fastapi.middleware.cors import CORSMiddleware
 
-
 # 테이블 생성
 Base.metadata.create_all(bind=engine)
 
@@ -13,21 +12,20 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(translate.router)
 
-# CORS 설정 추가
+origins = [
+    "chrome-extension://dkidpaekmpndoegjcppbclfaidjhljob",  # 크롬 확장 프로그램의 ID로 변경
+    "http://localhost:8000",  # 개발 중인 로컬 서버 주소
+    # 필요에 따라 추가적인 출처를 여기에 추가
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 모든 도메인 허용 (보안이 필요하면 특정 도메인만 허용)
+    allow_origins=origins,  # 모든 출처 허용 (배포 시에는 특정 도메인으로 제한해야 함)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.get("/")
-async def root():
-    return {"message": "FastAPI 서버 정상 작동 중"}
-
-@app.post("/translate")
-async def translate(text: str):
-    return {"translated_text": f"번역된 결과: {text}"}
-
-
+def root():
+    return {"message": "Hello, FastAPI!"}

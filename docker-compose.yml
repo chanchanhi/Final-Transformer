@@ -8,8 +8,12 @@ services:
         condition: service_healthy
     env_file:
       - ./fastapi-backend/.env
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"  # 내부에서만 접근 가능 (Nginx가 프록시 역할)
+    networks:
+      - app-network
+    #ports:
+    #  - "8000:8000"
 
   proxy:
     build: ./proxy-server
@@ -24,6 +28,8 @@ services:
       - "3000:3000"
     depends_on:
       - proxy
+    networks:
+      - app-network
 
   db:
     image: mysql:8
@@ -40,4 +46,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: always
+    depends_on:
+      - fastapi
+    ports:
+      - "443:443"  # HTTPS 지원
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs  # SSL 인증서 저장
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
