@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  fastapi:
+    build: ./fastapi-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./fastapi-backend/.env
+    ports:
+      - "8000:8000"
+
+  proxy:
+    build: ./proxy-server
+    ports:
+      - "3001:3001"
+    depends_on:
+      - fastapi
+
+  react:
+    build: ./gpt-translator-extension
+    ports:
+      - "3000:3000"
+    depends_on:
+      - proxy
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gpt_translator
+      MYSQL_USER: fastapi_user
+      MYSQL_PASSWORD: password123
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
