@@ -1,15 +1,15 @@
-# Node.js 최신 버전 사용
-FROM node:18
+FROM nginx:latest
 
-# 작업 디렉토리 설정
-WORKDIR /app
+# 작업 디렉토리를 nginx 설정 디렉터리로 설정
+WORKDIR /etc/nginx
 
-# 필요한 파일 복사
-COPY package.json package-lock.json ./
-RUN npm install
+# SSL 인증서 복사 (절대 경로로 변경)
+#COPY ../certs/cert.pem /etc/nginx/certs/cert.pem
+#COPY ../certs/key.pem /etc/nginx/certs/key.pem
 
-# 소스 코드 복사
-COPY . .
+# Nginx 설정 파일 복사
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# 서버 실행
-CMD ["node", "server.js"]
+# 기본 설정 파일 제거 (필요한 경우)
+RUN rm /etc/nginx/conf.d/default.conf
+
