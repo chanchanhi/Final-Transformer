@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from db.database import get_db
-from models.models import User
+from app.db.database import get_db
+from app.db.models import User
 from pydantic import BaseModel
 
-router = APIRouter()
+router = APIRouter(prefix="/api/users", tags=["users"])
 
 # User 생성 요청 모델
 class UserCreate(BaseModel):
@@ -13,7 +13,7 @@ class UserCreate(BaseModel):
     username: str
 
 # 사용자 추가 API
-@router.post("/users/")
+@router.post("/")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         google_id=user.google_id,

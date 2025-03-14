@@ -1,6 +1,7 @@
-from db.database import engine, Base
+from app.db.database import engine, Base
+from app.db import models
 from fastapi import FastAPI
-from routes import users, translate
+from app.routes import users, translate
 from fastapi.middleware.cors import CORSMiddleware
 
 # 테이블 생성

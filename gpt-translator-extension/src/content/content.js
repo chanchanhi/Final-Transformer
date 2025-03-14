@@ -1,3 +1,4 @@
+/**
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log("Received message:", request);
     
@@ -24,5 +25,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: true });
     }
 });
-
+*/
+// 사용자가 문장을 드래그했을 때 감지
+document.addEventListener("mouseup", () => {
+    const selectedText = window.getSelection().toString().trim();
+    
+    if (selectedText) {
+        chrome.runtime.sendMessage({ action: "TEXT_SELECTED", text: selectedText });
+    }
+});
 

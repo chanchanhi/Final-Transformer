@@ -1,7 +1,7 @@
-#version: "3.8"
+version: "3.8"
 
 services:
-  fastapi:
+  backend:
     build: ./fastapi-backend
     depends_on:
       db:
@@ -48,7 +48,7 @@ services:
     container_name: nginx-proxy
     restart: always
     depends_on:
-      - fastapi
+      - backend
     ports:
       - "443:443"  # HTTPS 지원
       - "80:80"

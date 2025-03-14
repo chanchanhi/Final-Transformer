@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 import os
 
 # .env 파일 로드 (fastapi-backend 디렉토리에 위치해야 함)
-dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+dotenv_path = os.path.join(BASE_DIR, ".env")
 load_dotenv(dotenv_path)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -13,3 +14,5 @@ if not OPENAI_API_KEY:
 
 if not DATABASE_URL:
     raise ValueError("🚨 DATABASE_URL가 설정되지 않았습니다. .env 파일을 확인하세요!")
+
+print("✅ 환경 변수 로드 완료")
